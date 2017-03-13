@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${brouwer.naam + ' (' + brouwer.adres.gemeente + ')'}"></title>
+    <link rel="stylesheet" th:href="@{/styles/brouwers.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/default.css}"/>
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a th:href="@{/}">Welkom</a></li>
+        <li><a th:href="@{/brouwers}">Brouwers</a></li>
+        <li><a th:href="@{/winkelwagen}">Winkelwagen</a></li>
+    </ul>
+</nav>
+<h1 th:text="${brouwer.naam + ' (' + brouwer.adres.gemeente + ')'}"></h1>
+<ul th:if="${bieren != null}">
+    <li th:each="bier : ${bieren}" ><a th:text="${bier.naam}" th:href="@{/bieren/{id}(id=${bier.id})}"></a> </li>
+</ul>
+</body>
+</html>
