@@ -34,6 +34,7 @@ public class BestelbonLijn implements Serializable{
 
     public BestelbonLijn(){}
 
+
     public long getBestelbonid() {
         return bestelbonid;
     }
@@ -56,6 +57,22 @@ public class BestelbonLijn implements Serializable{
 
     public Bestelbon getBestelbon() {
         return bestelbon;
+    }
+
+    public void setAantal(int aantal) {
+        this.aantal = aantal;
+    }
+
+    public void setPrijs(BigDecimal prijs) {
+        this.prijs = prijs;
+    }
+
+    public void setBier(Bier bier) {
+        this.bier = bier;
+    }
+
+    public void setBestelbon(Bestelbon bestelbon) {
+        this.bestelbon = bestelbon;
     }
 
     @Override

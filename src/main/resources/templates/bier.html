@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${bier.naam}"></title>
+    <link rel="stylesheet" th:href="@{/styles/brouwers.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/default.css}"/>
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a th:href="@{/}">Welkom</a></li>
+        <li><a th:href="@{/brouwers}">Brouwers</a></li>
+        <li><a th:href="@{/winkelwagen}">Winkelwagen</a></li>
+    </ul>
+</nav>
+<h1 th:text="${bier.naam}"></h1>
+<h2>Alcohol</h2>
+<p th:text="${bier.alcohol}"></p>
+<h2>Prijs</h2>
+<p th:text="${bier.prijs}"></p>
+<h2>Soort</h2>
+<p th:text="${bier.soort.naam}"></p>
+<h2>Brouwer</h2>
+<p th:text="${bier.brouwer.naam}"></p>
+<form th:action="@{/bieren/{id}(id=${bier.id})}" th:object="${aantalForm}" method="post">
+   <label>
+       <h2>Aantal</h2>
+       <input th:field="*{aantal}"/>
+       <br /><span th:if="${#fields.hasErrors('aantal')}"
+             th:errors='*{aantal}'></span>
+   </label><br />
+    <input type="submit" value="Toevoegen"/>
+</form>
+</body>
+</html>

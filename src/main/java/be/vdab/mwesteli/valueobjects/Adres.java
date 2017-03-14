@@ -2,6 +2,7 @@ package be.vdab.mwesteli.valueobjects;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Created by Maarten Westelinck on 13/03/2017 for bierhuis.
@@ -38,8 +39,8 @@ public final class Adres implements Serializable{
         this.straat = straat;
     }
 
-    public void setHuisnr(String huisNr) {
-        this.huisnr = huisNr;
+    public void setHuisnr(String huisnr) {
+        this.huisnr = huisnr;
     }
 
     public void setPostcode(int postcode) {
@@ -57,7 +58,7 @@ public final class Adres implements Serializable{
 
         Adres adres = (Adres) o;
 
-        if (getPostcode() != adres.getPostcode()) return false;
+        if (!Objects.equals(getPostcode(), adres.getPostcode())) return false;
         if (!getStraat().equals(adres.getStraat())) return false;
         if (!getHuisnr().equals(adres.getHuisnr())) return false;
         return getGemeente().equals(adres.getGemeente());

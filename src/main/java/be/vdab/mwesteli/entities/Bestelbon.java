@@ -40,6 +40,18 @@ public class Bestelbon implements Serializable{
         return adres;
     }
 
+    public void setNaam(String naam) {
+        this.naam = naam;
+    }
+
+    public void setAdres(Adres adres) {
+        this.adres = adres;
+    }
+
+    public void setBestelbonLijnen(List<BestelbonLijn> bestelbonLijnen) {
+        this.bestelbonLijnen = bestelbonLijnen;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
