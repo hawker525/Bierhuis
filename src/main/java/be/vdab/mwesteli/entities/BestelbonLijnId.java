@@ -14,12 +14,9 @@ public class BestelbonLijnId implements Serializable{
 
     public BestelbonLijnId(){}
 
-    public long getBestelbonid() {
-        return bestelbonid;
-    }
-
-    public long getBierid() {
-        return bierid;
+    public BestelbonLijnId(long bestelbonid, long bierid) {
+        this.bestelbonid = bestelbonid;
+        this.bierid = bierid;
     }
 
     @Override
@@ -29,14 +26,14 @@ public class BestelbonLijnId implements Serializable{
 
         BestelbonLijnId that = (BestelbonLijnId) o;
 
-        if (getBestelbonid() != that.getBestelbonid()) return false;
-        return getBierid() == that.getBierid();
+        if (bestelbonid != that.bestelbonid) return false;
+        return bierid == that.bierid;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (getBestelbonid() ^ (getBestelbonid() >>> 32));
-        result = 31 * result + (int) (getBierid() ^ (getBierid() >>> 32));
+        int result = (int) (bestelbonid ^ (bestelbonid >>> 32));
+        result = 31 * result + (int) (bierid ^ (bierid >>> 32));
         return result;
     }
 }

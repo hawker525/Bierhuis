@@ -23,36 +23,36 @@
     </tr>
     <tr th:each="lijn : ${session.winkelwagen}">
         <td th:text="${lijn.bier.naam}"></td>
-        <td th:text="${lijn.bier.prijs}"></td>
+        <td th:text="${#numbers.formatDecimal(lijn.bier.prijs, 1, 'POINT', 2, 'COMMA') + ' &euro;'}"></td>
         <td th:text="${lijn.aantal}"></td>
-        <td th:text="${lijn.totaal}"></td>
+        <td th:text="${#numbers.formatDecimal(lijn.totaal, 1, 'POINT', 2, 'COMMA') + ' &euro;'}"></td>
     </tr>
 </table>
-<p>Totaal: <span th:text="${#aggregates.sum(session.winkelwagen.![totaal])}"></span></p>
-<form action="#" th:action="@{/winkelwagen}" th:object="${adresForm}" method="post">
+<p>Totaal: <span th:text="${#numbers.formatDecimal(#aggregates.sum(session.winkelwagen.![totaal]), 1, 'POINT', 2, 'COMMA') + ' &euro;'}"></span></p>
+<form th:action="@{/winkelwagen}" th:object="${adresForm}" method="post">
     <label>
         <h2>Naam</h2>
-        <input type="text" th:field="*{naam}" />
+        <input type="text" required="required" th:field="*{naam}" />
         <span th:if="${#fields.hasErrors('naam')}" th:errors='*{naam}'></span>
     </label><br />
     <label>
         <h2>Straat</h2>
-        <input th:field="*{straat}"/>
+        <input type="text" required="required" th:field="*{straat}"/>
         <span th:if="${#fields.hasErrors('straat')}" th:errors='*{straat}'></span>
     </label><br />
     <label>
         <h2>Huisnummer</h2>
-        <input th:field="*{huisnr}"/>
+        <input type="text" required="required" th:field="*{huisnr}"/>
         <span th:if="${#fields.hasErrors('huisnr')}" th:errors='*{huisnr}'></span>
     </label><br />
     <label>
         <h2>Postcode</h2>
-        <input th:field="*{postcode}"/>
+        <input type="number" required="required" min="1000" max="9999" th:field="*{postcode}"/>
         <span th:if="${#fields.hasErrors('postcode')}" th:errors='*{postcode}'></span>
     </label><br />
     <label>
         <h2>Gemeente</h2>
-        <input th:field="*{gemeente}"/>
+        <input type="text" required="required" th:field="*{gemeente}"/>
         <span th:if="${#fields.hasErrors('gemeente')}" th:errors='*{gemeente}'></span>
     </label><br />
     <input type="submit" value="Als bestelbon bevestigen"/>

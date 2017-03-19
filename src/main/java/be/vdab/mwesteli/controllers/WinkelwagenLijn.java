@@ -9,13 +9,12 @@ import java.math.BigDecimal;
  */
 final class WinkelwagenLijn {
     private final Bier bier;
-    private final int aantal;
-    private final BigDecimal totaal;
+    private int aantal;
+    private BigDecimal totaal;
 
     WinkelwagenLijn(Bier bier, int aantal) {
         this.bier = bier;
-        this.aantal = aantal;
-        this.totaal = bier.getPrijs().multiply(BigDecimal.valueOf(aantal));
+        addAantal(aantal);
     }
 
     public Bier getBier() {
@@ -28,5 +27,10 @@ final class WinkelwagenLijn {
 
     public BigDecimal getTotaal() {
         return totaal;
+    }
+
+    void addAantal(int aantal){
+        this.aantal += aantal;
+        this.totaal = bier.getPrijs().multiply(BigDecimal.valueOf(this.aantal));
     }
 }

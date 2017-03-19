@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Maarten Westelinck on 14/03/2017 for bierhuis.
@@ -24,7 +25,7 @@ import java.util.List;
 @RequestMapping("/bieren")
 public class BierenController {
     private static final String BIER = "bier";
-    private static final String WINKELWAGEN = "winkelwagen";
+    private static final String REDIRECT_NA_TOEVOEGEN_BIER = "redirect:/winkelwagen";
     private final BierService bierService;
 
     public BierenController(BierService bierService) {
@@ -33,11 +34,10 @@ public class BierenController {
 
     @GetMapping("{bier}")
     ModelAndView read(@PathVariable Bier bier){
-        ModelAndView mav = new ModelAndView(BIER);
         if (bier != null) {
-            mav.addObject(bier).addObject(new AantalForm());
+            return new ModelAndView(BIER).addObject(bier).addObject(new AantalForm());
         }
-        return mav;
+        return new ModelAndView("redirect:/brouwers");
     }
 
     @PostMapping("{bier}")
@@ -45,7 +45,7 @@ public class BierenController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView(BIER).addObject(bier);
         } else {
-            ModelAndView mav = new ModelAndView(WINKELWAGEN);
+            ModelAndView mav = new ModelAndView(REDIRECT_NA_TOEVOEGEN_BIER);
             HttpSession session = request.getSession();
             List<WinkelwagenLijn> winkelwagen = (List<WinkelwagenLijn>) session.getAttribute("winkelwagen");
 
@@ -53,8 +53,15 @@ public class BierenController {
 
             if(winkelwagen == null) {
                 winkelwagen = new ArrayList<>();
+                winkelwagen.add(lijn);
+            } else {
+                Optional<WinkelwagenLijn> w = winkelwagen.stream().filter(l -> l.getBier().equals(bier)).findFirst();
+                if(w.isPresent()){
+                    w.get().addAantal(aantalForm.getAantal());
+                } else {
+                    winkelwagen.add(lijn);
+                }
             }
-            winkelwagen.add(lijn);
             session.setAttribute("winkelwagen", winkelwagen);
             return mav;
         }

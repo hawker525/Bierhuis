@@ -1,5 +1,8 @@
 package be.vdab.mwesteli.web;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.SafeHtml;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -9,13 +12,16 @@ import javax.validation.constraints.NotNull;
  */
 public final class AdresForm {
 
-    @NotNull
+    @NotBlank
+    @SafeHtml
     private String naam;
 
-    @NotNull
+    @NotBlank
+    @SafeHtml
     private String straat;
 
-    @NotNull
+    @NotBlank
+    @SafeHtml
     private String huisnr;
 
     @NotNull
@@ -23,7 +29,8 @@ public final class AdresForm {
     @Max(9999)
     private Integer postcode;
 
-    @NotNull
+    @NotBlank
+    @SafeHtml
     private String gemeente;
 
     public String getNaam() {
@@ -64,10 +71,5 @@ public final class AdresForm {
 
     public void setGemeente(String gemeente) {
         this.gemeente = gemeente;
-    }
-
-    @Override
-    public String toString() {
-        return "TOSTRING BABY WOOO";
     }
 }

@@ -3,6 +3,7 @@ package be.vdab.mwesteli.controllers;
 import be.vdab.mwesteli.entities.Bestelbon;
 import be.vdab.mwesteli.entities.BestelbonLijn;
 import be.vdab.mwesteli.entities.Bier;
+import be.vdab.mwesteli.services.BestelbonLijnService;
 import be.vdab.mwesteli.services.BestelbonService;
 import be.vdab.mwesteli.valueobjects.Adres;
 import be.vdab.mwesteli.web.AdresForm;
@@ -26,12 +27,14 @@ import java.util.List;
 @RequestMapping("/winkelwagen")
 public class WinkelwagenController {
     private final BestelbonService bestelbonService;
+    private final BestelbonLijnService bestelbonLijnService;
     private static final String WINKELWAGEN = "winkelwagen";
     private static final String REDIRECT = "redirect:/brouwers";
     private static final String BEVESTIGING = "bevestiging";
 
-    public WinkelwagenController(BestelbonService bestelbonService) {
+    public WinkelwagenController(BestelbonService bestelbonService, BestelbonLijnService bestelbonLijnService) {
         this.bestelbonService = bestelbonService;
+        this.bestelbonLijnService = bestelbonLijnService;
     }
 
     @GetMapping
@@ -40,7 +43,6 @@ public class WinkelwagenController {
         if(session == null || session.getAttribute("winkelwagen") == null) {
             return new ModelAndView(REDIRECT);
         }
-//        List<WinkelwagenLijn> winkelwagen = (List<WinkelwagenLijn>) session.getAttribute("winkelwagen");
         return new ModelAndView(WINKELWAGEN).addObject("adresForm", new AdresForm());
     }
 
@@ -49,7 +51,6 @@ public class WinkelwagenController {
         if(bindingResult.hasErrors()){
             return new ModelAndView(WINKELWAGEN);
         }
-        List<WinkelwagenLijn> winkelwagen = (List<WinkelwagenLijn>) request.getSession().getAttribute("winkelwagen");
 
         Adres adres = new Adres();
         adres.setGemeente(adresForm.getGemeente());
@@ -59,21 +60,24 @@ public class WinkelwagenController {
 
         List<BestelbonLijn> bestelbonLijnen = new ArrayList<>();
 
-        for (WinkelwagenLijn lijn : winkelwagen) {
-            BestelbonLijn bestelbonLijn = new BestelbonLijn();
-            Bier bier = lijn.getBier();
-            bestelbonLijn.setPrijs(bier.getPrijs());
-            bestelbonLijn.setBier(bier);
-            bestelbonLijn.setAantal(lijn.getAantal());
-        }
-
         Bestelbon bestelbon = new Bestelbon();
         bestelbon.setAdres(adres);
-        bestelbon.setBestelbonLijnen(bestelbonLijnen);
         bestelbon.setNaam(adresForm.getNaam());
         bestelbonService.create(bestelbon);
+
+        List<WinkelwagenLijn> winkelwagen = (List<WinkelwagenLijn>) request.getSession().getAttribute("winkelwagen");
+        for (WinkelwagenLijn lijn : winkelwagen) {
+            Bier bier = lijn.getBier();
+            BestelbonLijn bestelbonLijn = new BestelbonLijn(bestelbon.getId(), bier.getId());
+            bestelbonLijn.setPrijs(lijn.getTotaal());
+            bestelbonLijn.setAantal(lijn.getAantal());
+            bestelbonLijnen.add(bestelbonLijn);
+        }
+
+
+        bestelbonLijnService.createMultiple(bestelbonLijnen);
         request.getSession().removeAttribute("winkelwagen");
-        return new ModelAndView(BEVESTIGING).addObject(bestelbon.getId());
+        return new ModelAndView(BEVESTIGING).addObject("id", bestelbon.getId());
     }
 
 }

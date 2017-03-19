@@ -23,24 +23,11 @@ public class BestelbonLijn implements Serializable{
 
     private BigDecimal prijs;
 
-    @ManyToOne
-    @PrimaryKeyJoinColumn(name = "bierid", referencedColumnName = "id")
-    private Bier bier;
-
-
-    @ManyToOne
-    @PrimaryKeyJoinColumn(name = "bestelbonid", referencedColumnName = "id")
-    private Bestelbon bestelbon;
-
     public BestelbonLijn(){}
 
-
-    public long getBestelbonid() {
-        return bestelbonid;
-    }
-
-    public long getBierid() {
-        return bierid;
+    public BestelbonLijn(long bestelbonid, long bierid) {
+        this.bestelbonid = bestelbonid;
+        this.bierid = bierid;
     }
 
     public int getAantal() {
@@ -51,12 +38,12 @@ public class BestelbonLijn implements Serializable{
         return prijs;
     }
 
-    public Bier getBier() {
-        return bier;
+    public long getBestelbonid() {
+        return bestelbonid;
     }
 
-    public Bestelbon getBestelbon() {
-        return bestelbon;
+    public long getBierid() {
+        return bierid;
     }
 
     public void setAantal(int aantal) {
@@ -67,14 +54,6 @@ public class BestelbonLijn implements Serializable{
         this.prijs = prijs;
     }
 
-    public void setBier(Bier bier) {
-        this.bier = bier;
-    }
-
-    public void setBestelbon(Bestelbon bestelbon) {
-        this.bestelbon = bestelbon;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,22 +61,18 @@ public class BestelbonLijn implements Serializable{
 
         BestelbonLijn that = (BestelbonLijn) o;
 
-        if (getBestelbonid() != that.getBestelbonid()) return false;
-        if (getBierid() != that.getBierid()) return false;
-        if (getAantal() != that.getAantal()) return false;
-        if (!getPrijs().equals(that.getPrijs())) return false;
-        if (!getBier().equals(that.getBier())) return false;
-        return getBestelbon().equals(that.getBestelbon());
+        if (bestelbonid != that.bestelbonid) return false;
+        if (bierid != that.bierid) return false;
+        if (aantal != that.aantal) return false;
+        return prijs.equals(that.prijs);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (getBestelbonid() ^ (getBestelbonid() >>> 32));
-        result = 31 * result + (int) (getBierid() ^ (getBierid() >>> 32));
-        result = 31 * result + getAantal();
-        result = 31 * result + getPrijs().hashCode();
-        result = 31 * result + getBier().hashCode();
-        result = 31 * result + getBestelbon().hashCode();
+        int result = (int) (bestelbonid ^ (bestelbonid >>> 32));
+        result = 31 * result + (int) (bierid ^ (bierid >>> 32));
+        result = 31 * result + aantal;
+        result = 31 * result + prijs.hashCode();
         return result;
     }
 }

@@ -23,7 +23,7 @@ public class Bestelbon implements Serializable{
     @Embedded
     private Adres adres;
 
-    @OneToMany(mappedBy = "bestelbon")
+    @OneToMany
     private List<BestelbonLijn> bestelbonLijnen;
 
     public Bestelbon(){}
@@ -38,6 +38,10 @@ public class Bestelbon implements Serializable{
 
     public Adres getAdres() {
         return adres;
+    }
+
+    public List<BestelbonLijn> getBestelbonLijnen(){
+        return bestelbonLijnen;
     }
 
     public void setNaam(String naam) {
@@ -59,16 +63,16 @@ public class Bestelbon implements Serializable{
 
         Bestelbon bestelbon = (Bestelbon) o;
 
-        if (getId() != bestelbon.getId()) return false;
-        if (getNaam() != null ? !getNaam().equals(bestelbon.getNaam()) : bestelbon.getNaam() != null) return false;
-        return getAdres().equals(bestelbon.getAdres());
+        if (!naam.equals(bestelbon.naam)) return false;
+        if (!adres.equals(bestelbon.adres)) return false;
+        return bestelbonLijnen.equals(bestelbon.bestelbonLijnen);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + (getNaam() != null ? getNaam().hashCode() : 0);
-        result = 31 * result + getAdres().hashCode();
+        int result = naam.hashCode();
+        result = 31 * result + adres.hashCode();
+        result = 31 * result + bestelbonLijnen.hashCode();
         return result;
     }
 }

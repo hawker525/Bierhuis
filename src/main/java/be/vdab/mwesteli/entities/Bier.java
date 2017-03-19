@@ -23,15 +23,16 @@ public class Bier implements Serializable {
     private BigDecimal prijs;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "brouwerid")
     private Brouwer brouwer;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "soortid")
     private Soort soort;
 
-    @OneToMany(mappedBy = "bier")
+//    @OneToMany(mappedBy = "bier")
+    @OneToMany
     private List<BestelbonLijn> bestelbonlijnen;
 
     public Bier(){}
@@ -71,18 +72,20 @@ public class Bier implements Serializable {
 
         Bier bier = (Bier) o;
 
-        if (getId() != bier.getId()) return false;
-        if (!getNaam().equals(bier.getNaam())) return false;
-        if (getAlcohol() != null ? !getAlcohol().equals(bier.getAlcohol()) : bier.getAlcohol() != null) return false;
-        return getPrijs() != null ? getPrijs().equals(bier.getPrijs()) : bier.getPrijs() == null;
+        if (!naam.equals(bier.naam)) return false;
+        if (alcohol != null ? !alcohol.equals(bier.alcohol) : bier.alcohol != null) return false;
+        if (prijs != null ? !prijs.equals(bier.prijs) : bier.prijs != null) return false;
+        if (!brouwer.equals(bier.brouwer)) return false;
+        return soort.equals(bier.soort);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + getNaam().hashCode();
-        result = 31 * result + (getAlcohol() != null ? getAlcohol().hashCode() : 0);
-        result = 31 * result + (getPrijs() != null ? getPrijs().hashCode() : 0);
+        int result = naam.hashCode();
+        result = 31 * result + (alcohol != null ? alcohol.hashCode() : 0);
+        result = 31 * result + (prijs != null ? prijs.hashCode() : 0);
+        result = 31 * result + brouwer.hashCode();
+        result = 31 * result + soort.hashCode();
         return result;
     }
 }
